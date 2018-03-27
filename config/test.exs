@@ -12,8 +12,6 @@ config :logger, level: :warn
 # Configure your database
 config :coffee_tracker, CoffeeTracker.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
   database: "coffee_tracker_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
