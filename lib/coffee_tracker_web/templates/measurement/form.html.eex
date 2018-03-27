@@ -20,10 +20,10 @@
   <div class="form-group">
     <%= label f, :unit, class: "control-label" do %>
       <%= radio_button f, :unit, "g" %> grams
-    <%= end %>
+    <% end %>
     <%= label f, :unit, class: "control-label" do %>
       <%= radio_button f, :unit, "lbm" %> pounds
-    <%= end %>
+    <% end %>
     <%= error_tag f, :unit %>
   </div>
 
@@ -36,10 +36,10 @@
   <div class="form-group">
     <%= label f, :type, class: "control-label" do %>
       <%= radio_button f, :type, "Regular" %> Regular
-    <%= end %>
+    <% end %>
     <%= label f, :type, class: "control-label" do %>
       <%= radio_button f, :type, "Decaf" %> Decaf
-    <%= end %>
+    <% end %>
     <%= error_tag f, :type %>
   </div>
 
