@@ -1,0 +1,5 @@
+<h2>Edit Measurement</h2>
+
+<%= render "form.html", Map.put(assigns, :action, measurement_path(@conn, :update, @measurement)) %>
+
+<span><%= link "Back", to: measurement_path(@conn, :index) %></span>

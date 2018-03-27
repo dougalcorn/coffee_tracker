@@ -16,6 +16,8 @@ defmodule CoffeeTrackerWeb.Router do
   scope "/", CoffeeTrackerWeb do
     pipe_through :browser # Use the default browser stack
 
+    resources "/measurements", MeasurementController
+    resources "/containers", ContainerController
     get "/", PageController, :index
   end
 

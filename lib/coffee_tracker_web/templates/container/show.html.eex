@@ -1,0 +1,23 @@
+<h2>Show Container</h2>
+
+<ul>
+
+  <li>
+    <strong>Weight:</strong>
+    <%= @container.weight %>
+  </li>
+
+  <li>
+    <strong>Unit:</strong>
+    <%= @container.unit %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @container.name %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: container_path(@conn, :edit, @container) %></span>
+<span><%= link "Back", to: container_path(@conn, :index) %></span>

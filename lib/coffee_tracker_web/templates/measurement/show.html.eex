@@ -1,0 +1,28 @@
+<h2>Show Measurement</h2>
+
+<ul>
+
+  <li>
+    <strong>Unit:</strong>
+    <%= @measurement.unit %>
+  </li>
+
+  <li>
+    <strong>Weight:</strong>
+    <%= @measurement.weight %>
+  </li>
+
+  <li>
+    <strong>Date:</strong>
+    <%= @measurement.date %>
+  </li>
+
+  <li>
+    <strong>Type:</strong>
+    <%= @measurement.type %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: measurement_path(@conn, :edit, @measurement) %></span>
+<span><%= link "Back", to: measurement_path(@conn, :index) %></span>
