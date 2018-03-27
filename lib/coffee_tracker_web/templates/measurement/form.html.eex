@@ -18,8 +18,12 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :unit, class: "control-label" %>
-    <%= text_input f, :unit, class: "form-control" %>
+    <%= label f, :unit, class: "control-label" do %>
+      <%= radio_button f, :unit, "g" %> grams
+    <%= end %>
+    <%= label f, :unit, class: "control-label" do %>
+      <%= radio_button f, :unit, "lbm" %> pounds
+    <%= end %>
     <%= error_tag f, :unit %>
   </div>
 
