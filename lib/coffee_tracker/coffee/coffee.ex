@@ -6,6 +6,24 @@ defmodule CoffeeTracker.Coffee do
   import Ecto.Query, warn: false
   alias CoffeeTracker.Repo
 
+  alias CoffeeTracker.Coffee.DailyTotal
+
+  @doc """
+  Gets a the total amount of coffee on a given day.
+
+  Raises `Ecto.NoResultsError` if there are no measurements for that day.
+
+  ## Examples
+
+  iex> get_daily_total!(~D[03/28/2018])
+  %DailyTotal{}
+
+  iex> get_daily_total!(~D[03/31/2018])
+  ** (Ecto.NoResultsError)
+
+  """
+  def get_daily_total!(date), do: DailyTotal.get_daily_total!(date)
+
   alias CoffeeTracker.Coffee.Container
 
   @doc """
