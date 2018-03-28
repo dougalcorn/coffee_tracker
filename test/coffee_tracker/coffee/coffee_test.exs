@@ -139,4 +139,15 @@ defmodule CoffeeTracker.CoffeeTest do
       assert %Ecto.Changeset{} = Coffee.change_measurement(measurement)
     end
   end
+
+  describe "daily totals" do
+    alias CoffeeTracker.Coffee.DailyTotal
+
+    test "list_daily_totals returns a single total for every day there's a measurement" do
+      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-27], unit: "g", weight: 450, type: "regular"})
+      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-27], unit: "g", weight: 450, type: "regular"})
+      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-28], unit: "g", weight: 450, type: "regular"})
+      assert [%DailyTotal{}, %DailyTotal{}] = Coffee.list_daily_totals()
+    end
+  end
 end

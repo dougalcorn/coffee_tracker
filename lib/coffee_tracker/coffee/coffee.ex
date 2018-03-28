@@ -9,9 +9,14 @@ defmodule CoffeeTracker.Coffee do
   alias CoffeeTracker.Coffee.DailyTotal
 
   def list_daily_totals() do
-    [get_daily_total!(Date.utc_today)]
+    list_measurement_dates()
+    |> Enum.map(&get_daily_total!/1)
   end
 
+  def list_measurement_dates() do
+    query = from m in CoffeeTracker.Coffee.Measurement, select: m.date, distinct: true
+    CoffeeTracker.Repo.all(query)
+  end
   @doc """
   Gets a the total amount of coffee on a given day.
 
