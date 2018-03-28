@@ -11,7 +11,12 @@ defmodule CoffeeTracker.Coffee.DailyTotalTest do
   end
 
   describe "get_daily_total!" do
-    test "adds all the measurements with the same units" do
+    test "has the right date" do
+      date = ~D[2018-03-28]
+      {:ok, _} = Coffee.create_measurement(%{date: date, unit: "g", weight: 450, type: "regular"})
+      assert %DailyTotal{date: ^date} = DailyTotal.get_daily_total!(date)
+    end
+    test "adds all the measurements" do
       date = ~D[2018-03-28]
       {:ok, _} = Coffee.create_measurement(%{date: date, unit: "g", weight: 450, type: "regular"})
       {:ok, _} = Coffee.create_measurement(%{date: date, unit: "g", weight: 400, type: "regular"})

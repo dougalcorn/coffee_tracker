@@ -6,7 +6,7 @@ defmodule CoffeeTracker.Coffee.DailyTotal do
 
   def get_daily_total!(date) do
     %{weight: total} = total_weight(Coffee.list_daily_measurements(date))
-    %DailyTotal{unit: "g", weight: total}
+    %DailyTotal{unit: "g", weight: total, date: date}
   end
 
 
