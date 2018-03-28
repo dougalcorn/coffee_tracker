@@ -3,7 +3,6 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Unit</th>
       <th>Weight</th>
       <th>Date</th>
     </tr>
@@ -11,8 +10,7 @@
   <tbody>
 <%= for daily_total <- @daily_totals do %>
     <tr>
-      <td><%= daily_total.unit %></td>
-      <td><%= daily_total.weight %></td>
+      <td><%= display_measurement(daily_total, nil) %> </td>
       <td><%= link daily_total.date, to: daily_summary_path(CoffeeTrackerWeb.Endpoint, :show, daily_total.date.year, daily_total.date.month, daily_total.date.day) %></td>
     </tr>
 <% end %>
