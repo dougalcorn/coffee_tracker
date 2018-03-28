@@ -136,6 +136,15 @@ defmodule CoffeeTracker.Coffee do
   end
 
   @doc """
+  Returns the list of measurements for a given Date.
+  """
+  def list_daily_measurements(date) do
+    CoffeeTracker.Coffee.Measurement
+    |> Ecto.Query.where(date: ^date)
+    |> CoffeeTracker.Repo.all
+  end
+
+  @doc """
   Gets a single measurement.
 
   Raises `Ecto.NoResultsError` if the Measurement does not exist.
