@@ -11,6 +11,7 @@ defmodule CoffeeTrackerWeb.DailySummaryController do
   def show(conn, %{"year" => year, "month" => month, "day" => day}) do
     {:ok, date} = Date.new(String.to_integer(year), String.to_integer(month), String.to_integer(day))
     daily_total = Coffee.get_daily_total!(date)
-    render(conn, "show.html", daily_total: daily_total)
+    measurements = Coffee.list_daily_measurements(date)
+    render(conn, "show.html", daily_total: daily_total, measurements: measurements)
   end
 end

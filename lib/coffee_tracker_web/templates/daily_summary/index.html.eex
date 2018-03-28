@@ -13,7 +13,7 @@
     <tr>
       <td><%= daily_total.unit %></td>
       <td><%= daily_total.weight %></td>
-      <td><%= daily_total.date %></td>
+      <td><%= link daily_total.date, to: daily_summary_path(CoffeeTrackerWeb.Endpoint, :show, daily_total.date.year, daily_total.date.month, daily_total.date.day) %></td>
     </tr>
 <% end %>
   </tbody>

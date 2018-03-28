@@ -1,17 +1,28 @@
 <h2>Daily Summary for <%= @daily_total.date %></h2>
 
-<ul>
+<strong> Total: <%= @daily_total.weight %><%= @daily_total.unit %></strong>
 
-  <li>
-    <strong>Unit:</strong>
-    <%= @daily_total.unit %>
-  </li>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Weight</th>
 
-  <li>
-    <strong>Weight:</strong>
-    <%= @daily_total.weight %>
-  </li>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for measurement <- @measurements do %>
+    <tr>
+      <td><%= display_measurement(measurement, measurement.container) %> of <%= measurement.type %></td>
 
-</ul>
+      <td class="text-right">
+        <span><%= link "Show", to: measurement_path(@conn, :show, measurement), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: measurement_path(@conn, :edit, measurement), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: measurement_path(@conn, :delete, measurement), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
 
 <span><%= link "Back", to: daily_summary_path(@conn, :index) %></span>
