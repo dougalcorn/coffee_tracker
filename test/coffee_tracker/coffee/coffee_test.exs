@@ -93,6 +93,13 @@ defmodule CoffeeTracker.CoffeeTest do
       assert Coffee.get_measurement!(measurement.id) == measurement
     end
 
+    test "create_measurement/1 with a container_id creates the reference" do
+      {:ok, container} = Coffee.create_container(%{name: "bag", weight: 450, unit: "g"})
+      measurement = measurement_fixture(%{container_id: container.id}) |> Repo.preload(:container)
+      assert measurement.container_id == container.id
+      assert measurement.container == container
+    end
+
     test "create_measurement/1 with valid data creates a measurement" do
       assert {:ok, %Measurement{} = measurement} = Coffee.create_measurement(@valid_attrs)
       assert measurement.date == ~D[2010-04-17]

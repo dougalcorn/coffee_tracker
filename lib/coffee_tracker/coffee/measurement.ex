@@ -16,7 +16,7 @@ defmodule CoffeeTracker.Coffee.Measurement do
   @doc false
   def changeset(measurement, attrs) do
     measurement
-    |> cast(attrs, [:unit, :weight, :date, :type])
+    |> cast(attrs, [:unit, :weight, :date, :type, :container_id])
     |> validate_required([:unit, :weight, :date, :type])
   end
 end
