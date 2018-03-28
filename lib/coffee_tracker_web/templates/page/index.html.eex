@@ -1,6 +1,15 @@
-<div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
+<div class="row">
+  <p>This is a simple app to track how much coffee we have on hand for any given day.
+The goal is to notice trends over time and make sure we order the right amount
+    of coffee every two weeks.</p>
+
+  <p>The expected interaction is to come into the office each morning and weigh the
+coffee containers. We have bags of coffee, cannisters with coffee in them, and a
+hopper on the grinder. Each container is setup in the system with it's empty
+weight. When making a measurement, just indicate what container you're weighing
+and record the total weight. The app will subtract out the container weight when
+    reporting totals.</p>
+
 </div>
 
 <div class="row marketing">
