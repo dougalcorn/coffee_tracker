@@ -9,6 +9,14 @@ defmodule CoffeeTrackerWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :auth do
+    plug CoffeeTracker.Auth.Pipeline
+  end
+
+  pipeline :ensure_auth do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -16,15 +24,17 @@ defmodule CoffeeTrackerWeb.Router do
   scope "/", CoffeeTrackerWeb do
     pipe_through :browser # Use the default browser stack
 
-    resources "/measurements", MeasurementController
-    resources "/containers", ContainerController
     get "/coffee/:year/:month/:day", DailySummaryController, :show
     get "/", DailySummaryController, :index
     get "/about", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", CoffeeTrackerWeb do
-  #   pipe_through :api
-  # end
+  # require login
+  scope "/", CoffeeTrackerWeb do
+    pipe_through [:browser, :auth, :ensure_auth]
+    get "/secret", PageController, :secret
+
+    resources "/measurements", MeasurementController
+    resources "/containers", ContainerController
+  end
 end
