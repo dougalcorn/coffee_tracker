@@ -23,7 +23,7 @@
 
   <div class="form-group">
     <%= label f, :weight, class: "control-label" %>
-    <%= text_input f, :weight, class: "form-control", pattern: "\d*" %>
+    <%= text_input f, :weight, class: "form-control", pattern: "\\d*" %>
     <%= error_tag f, :weight %>
   </div>
 
