@@ -7,7 +7,7 @@
 
   <div class="form-group">
     <%= label f, :container, class: "control-label" %>
-    <%= select f, :container_id, containers %>
+    <%= select f, :container_id, containers() %>
     <%= error_tag f, :container_id %>
   </div>
 
