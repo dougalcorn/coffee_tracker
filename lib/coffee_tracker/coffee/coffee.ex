@@ -8,6 +8,10 @@ defmodule CoffeeTracker.Coffee do
 
   alias CoffeeTracker.Coffee.DailyTotal
 
+  def list_daily_totals() do
+    [get_daily_total!(Date.utc_today)]
+  end
+
   @doc """
   Gets a the total amount of coffee on a given day.
 
