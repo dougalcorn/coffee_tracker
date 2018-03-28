@@ -1,0 +1,23 @@
+<h2>Daily Summary of Coffee</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Unit</th>
+      <th>Weight</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for daily_total <- @daily_totals do %>
+    <tr>
+      <td><%= daily_total.unit %></td>
+      <td><%= daily_total.weight %></td>
+      <td><%= daily_total.date %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Measurement", to: measurement_path(@conn, :new) %></span>
+

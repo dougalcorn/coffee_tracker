@@ -18,6 +18,8 @@ defmodule CoffeeTrackerWeb.Router do
 
     resources "/measurements", MeasurementController
     resources "/containers", ContainerController
+    get "/coffee", DailySummaryController, :index
+    get "/coffee/:year/:month/:day", DailySummaryController, :show
     get "/", PageController, :index
   end
 

@@ -1,0 +1,17 @@
+<h2>Daily Summary for <%= @daily_total.date %></h2>
+
+<ul>
+
+  <li>
+    <strong>Unit:</strong>
+    <%= @daily_total.unit %>
+  </li>
+
+  <li>
+    <strong>Weight:</strong>
+    <%= @daily_total.weight %>
+  </li>
+
+</ul>
+
+<span><%= link "Back", to: daily_summary_path(@conn, :index) %></span>
