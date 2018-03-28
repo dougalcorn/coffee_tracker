@@ -18,9 +18,9 @@ defmodule CoffeeTrackerWeb.Router do
 
     resources "/measurements", MeasurementController
     resources "/containers", ContainerController
-    get "/coffee", DailySummaryController, :index
     get "/coffee/:year/:month/:day", DailySummaryController, :show
-    get "/", PageController, :index
+    get "/", DailySummaryController, :index
+    get "/about", PageController, :index
   end
 
   # Other scopes may use custom stacks.
