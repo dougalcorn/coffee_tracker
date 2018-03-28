@@ -2,4 +2,4 @@
 
 <%= render "form.html", Map.put(assigns, :action, measurement_path(@conn, :create)) %>
 
-<span><%= link "Back", to: measurement_path(@conn, :index) %></span>
+<span><%= link "Back", to: daily_summary_path(@conn, :index) %></span>

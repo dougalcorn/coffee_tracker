@@ -10,7 +10,7 @@ defmodule CoffeeTrackerWeb.MeasurementController do
   end
 
   def new(conn, _params) do
-    changeset = Coffee.change_measurement(%Measurement{})
+    changeset = Coffee.change_measurement(%Measurement{date: Date.utc_today, unit: "g", type: "Regular"})
     render(conn, "new.html", changeset: changeset)
   end
 
@@ -19,7 +19,7 @@ defmodule CoffeeTrackerWeb.MeasurementController do
       {:ok, measurement} ->
         conn
         |> put_flash(:info, "Measurement created successfully.")
-        |> redirect(to: measurement_path(conn, :show, measurement))
+        |> redirect(to: daily_summary_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -43,7 +43,7 @@ defmodule CoffeeTrackerWeb.MeasurementController do
       {:ok, measurement} ->
         conn
         |> put_flash(:info, "Measurement updated successfully.")
-        |> redirect(to: measurement_path(conn, :show, measurement))
+        |> redirect(to: daily_summary_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", measurement: measurement, changeset: changeset)
     end
@@ -55,6 +55,6 @@ defmodule CoffeeTrackerWeb.MeasurementController do
 
     conn
     |> put_flash(:info, "Measurement deleted successfully.")
-    |> redirect(to: measurement_path(conn, :index))
+    |> redirect(to: daily_summary_path(conn, :index))
   end
 end
