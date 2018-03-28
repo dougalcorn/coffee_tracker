@@ -1,5 +1,7 @@
 # CoffeeTracker
 
+Live data is at http://gaslight-coffee.herokuapp.com/
+
 This is a simple app to track how much coffee we have on hand for any given day.
 The goal is to notice trends over time and make sure we order the right amount
 of coffee every two weeks.
