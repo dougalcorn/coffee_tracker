@@ -151,6 +151,7 @@ defmodule CoffeeTracker.Coffee do
     CoffeeTracker.Coffee.Measurement
     |> Ecto.Query.where(date: ^date)
     |> CoffeeTracker.Repo.all
+    |> CoffeeTracker.Repo.preload(:container)
   end
 
   @doc """
