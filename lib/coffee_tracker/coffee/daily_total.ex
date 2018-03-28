@@ -9,6 +9,7 @@ defmodule CoffeeTracker.Coffee.DailyTotal do
     %DailyTotal{unit: "g", weight: total, date: date}
   end
 
+  @grams_per_pound 454
 
   defp total_weight(measurements) do
     start = %{unit: "g", weight: 0}
@@ -19,8 +20,7 @@ defmodule CoffeeTracker.Coffee.DailyTotal do
     %{unit: "g", weight: a + b}
   end
 
-  defp add_weight(%{unit: "lbm", weight: a}, %{unit: "g", weight: b}) do
-    total = (a * 2268) + b
-    %{unit: "g", weight: total}
+  defp add_weight(%{unit: "lbm", weight: a}, %{unit: "g"} = b ) do
+    add_weight(%{unit: "g", weight: a * @grams_per_pound}, b)
   end
 end

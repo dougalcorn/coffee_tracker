@@ -25,7 +25,7 @@ defmodule CoffeeTracker.Coffee.DailyTotalTest do
 
     test "does unit conversion" do
       date = ~D[2018-03-28]
-      total = 2268 + 400
+      total = 454 + 400
       {:ok, _} = Coffee.create_measurement(%{date: date, unit: "lbm", weight: 1, type: "regular"})
       {:ok, _} = Coffee.create_measurement(%{date: date, unit: "g", weight: 400, type: "regular"})
       assert %DailyTotal{unit: "g", weight: ^total} = DailyTotal.get_daily_total!(date)
