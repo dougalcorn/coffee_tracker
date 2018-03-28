@@ -24,6 +24,10 @@ defmodule CoffeeTrackerWeb.Router do
   scope "/", CoffeeTrackerWeb do
     pipe_through :browser # Use the default browser stack
 
+    get "/login", SessionController, :new
+    post "/login", SessionController, :create
+    post "/logout", SessionController, :delete
+
     get "/coffee/:year/:month/:day", DailySummaryController, :show
     get "/", DailySummaryController, :index
     get "/about", PageController, :index
