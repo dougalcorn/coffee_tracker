@@ -14,7 +14,7 @@ defmodule CoffeeTracker.Coffee do
   end
 
   def list_measurement_dates() do
-    query = from m in CoffeeTracker.Coffee.Measurement, select: m.date, distinct: true
+    query = from m in CoffeeTracker.Coffee.Measurement, select: m.date, order_by: [desc: m.date], distinct: true
     CoffeeTracker.Repo.all(query)
   end
   @doc """
