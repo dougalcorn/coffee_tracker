@@ -1,19 +1,29 @@
 <h2>Daily Summary for <%= @daily_total.date %></h2>
 
-<strong> Total: <%= @daily_total.weight %><%= @daily_total.unit %></strong>
-
 <table class="table">
   <thead>
     <tr>
-      <th>Weight</th>
-
+      <th>Regular</th>
+      <th>Decaf</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-<%= for measurement <- @measurements do %>
+<%= for measurement <- Enum.filter(@measurements, fn(x) -> x.type == "Regular" end) do %>
     <tr>
-      <td><%= display_measurement(measurement, measurement.container) %> of <%= measurement.type %></td>
+      <td><%= display_measurement(measurement, measurement.container) %></td>
+      <td></td>
+
+      <td class="text-right">
+        <span><%= link "Edit", to: measurement_path(@conn, :edit, measurement), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: measurement_path(@conn, :delete, measurement), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+<%= for measurement <- Enum.filter(@measurements, fn(x) -> x.type == "Decaf" end) do %>
+    <tr>
+      <td></td>
+      <td><%= display_measurement(measurement, measurement.container) %></td>
 
       <td class="text-right">
         <span><%= link "Edit", to: measurement_path(@conn, :edit, measurement), class: "btn btn-default btn-xs" %></span>
@@ -22,6 +32,13 @@
     </tr>
 <% end %>
   </tbody>
+  <tfoot>
+    <tr>
+      <td><strong><%= display_measurement(%{unit: @daily_total.unit, weight: @daily_total.regular}, nil) %></strong> </td>
+      <td><strong><%= display_measurement(%{unit: @daily_total.unit, weight: @daily_total.decaf}, nil) %></strong> </td>
+      <td class="text-right"><strong>Total: <%= display_measurement(@daily_total, nil) %></strong> </td>
+    </tr>
+  </tfoot>
 </table>
 
 <span><%= link "New Measurement", to: measurement_path(@conn, :new) %></span>
