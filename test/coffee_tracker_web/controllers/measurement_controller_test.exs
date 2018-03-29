@@ -12,6 +12,20 @@ defmodule CoffeeTrackerWeb.MeasurementControllerTest do
     measurement
   end
 
+  def show_path(conn, %{date: date}) do
+    daily_summary_path(conn, :show, date.year, date.month, date.day)
+  end
+
+  alias CoffeeTracker.Auth.Guardian
+  alias CoffeeTracker.Auth
+
+  setup %{conn: conn} do
+    {:ok, user} = Auth.create_user(%{username: "doug", password: "pass"})
+    {:ok, token, _} = Guardian.encode_and_sign(user, %{}, token_type: :access)
+    conn = put_req_header(conn, "authorization", "bearer: " <> token)
+    {:ok, conn: conn}
+  end
+
   describe "index" do
     test "lists all measurements", %{conn: conn} do
       conn = get conn, measurement_path(conn, :index)
@@ -30,11 +44,7 @@ defmodule CoffeeTrackerWeb.MeasurementControllerTest do
     test "redirects to show when data is valid", %{conn: conn} do
       conn = post conn, measurement_path(conn, :create), measurement: @create_attrs
 
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == measurement_path(conn, :show, id)
-
-      conn = get conn, measurement_path(conn, :show, id)
-      assert html_response(conn, 200) =~ "Show Measurement"
+      assert redirected_to(conn) == show_path(conn, @create_attrs)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -56,11 +66,11 @@ defmodule CoffeeTrackerWeb.MeasurementControllerTest do
     setup [:create_measurement]
 
     test "redirects when data is valid", %{conn: conn, measurement: measurement} do
-      conn = put conn, measurement_path(conn, :update, measurement), measurement: @update_attrs
-      assert redirected_to(conn) == measurement_path(conn, :show, measurement)
+      response = put conn, measurement_path(conn, :update, measurement), measurement: @update_attrs
+      assert redirected_to(response) == show_path(conn, @update_attrs)
 
-      conn = get conn, measurement_path(conn, :show, measurement)
-      assert html_response(conn, 200) =~ "some updated type"
+      response = get conn, measurement_path(conn, :show, measurement)
+      assert html_response(response, 200) =~ "some updated type"
     end
 
     test "renders errors when data is invalid", %{conn: conn, measurement: measurement} do
@@ -73,8 +83,8 @@ defmodule CoffeeTrackerWeb.MeasurementControllerTest do
     setup [:create_measurement]
 
     test "deletes chosen measurement", %{conn: conn, measurement: measurement} do
-      conn = delete conn, measurement_path(conn, :delete, measurement)
-      assert redirected_to(conn) == measurement_path(conn, :index)
+      response = delete conn, measurement_path(conn, :delete, measurement)
+      assert redirected_to(response) == show_path(conn, measurement)
       assert_error_sent 404, fn ->
         get conn, measurement_path(conn, :show, measurement)
       end

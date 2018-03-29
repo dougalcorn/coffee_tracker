@@ -12,6 +12,13 @@ defmodule CoffeeTrackerWeb.ContainerControllerTest do
     container
   end
 
+  import CoffeeTracker.Test.Auth
+
+  setup %{conn: conn} do
+    user = create_user(%{username: "doug", password: "pass"})
+    {:ok, conn: authenticate(conn, user), user: user}
+  end
+
   describe "index" do
     test "lists all containers", %{conn: conn} do
       conn = get conn, container_path(conn, :index)
@@ -32,9 +39,6 @@ defmodule CoffeeTrackerWeb.ContainerControllerTest do
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == container_path(conn, :show, id)
-
-      conn = get conn, container_path(conn, :show, id)
-      assert html_response(conn, 200) =~ "Show Container"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -58,9 +62,6 @@ defmodule CoffeeTrackerWeb.ContainerControllerTest do
     test "redirects when data is valid", %{conn: conn, container: container} do
       conn = put conn, container_path(conn, :update, container), container: @update_attrs
       assert redirected_to(conn) == container_path(conn, :show, container)
-
-      conn = get conn, container_path(conn, :show, container)
-      assert html_response(conn, 200) =~ "some updated name"
     end
 
     test "renders errors when data is invalid", %{conn: conn, container: container} do
@@ -73,8 +74,8 @@ defmodule CoffeeTrackerWeb.ContainerControllerTest do
     setup [:create_container]
 
     test "deletes chosen container", %{conn: conn, container: container} do
-      conn = delete conn, container_path(conn, :delete, container)
-      assert redirected_to(conn) == container_path(conn, :index)
+      response = delete conn, container_path(conn, :delete, container)
+      assert redirected_to(response) == container_path(conn, :index)
       assert_error_sent 404, fn ->
         get conn, container_path(conn, :show, container)
       end
