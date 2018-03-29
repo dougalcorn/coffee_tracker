@@ -17,6 +17,9 @@ and record the total weight. The app will subtract out the container weight when
     <h4>Resources</h4>
     <ul>
       <li>
+        <a href="https://github.com/dougalcorn/coffee_tracker">Github Repo</a>
+      </li>
+      <li>
         <a href="http://phoenixframework.org/docs/overview">Guides</a>
       </li>
       <li>
