@@ -140,14 +140,27 @@ defmodule CoffeeTracker.CoffeeTest do
     end
   end
 
-  describe "daily totals" do
+  describe "list_daily_totals" do
     alias CoffeeTracker.Coffee.DailyTotal
 
-    test "list_daily_totals returns a single total for every day there's a measurement" do
-      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-27], unit: "g", weight: 450, type: "regular"})
-      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-27], unit: "g", weight: 450, type: "regular"})
-      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-28], unit: "g", weight: 450, type: "regular"})
+    test "returns a single total for every day there's a measurement" do
+      {:ok, container} = Coffee.create_container(%{unit: "g", weight: 0, name: "bag"})
+      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-27], unit: "g", weight: 450, type: "regular", container_id: container.id})
+      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-27], unit: "g", weight: 450, type: "regular", container_id: container.id})
+      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-28], unit: "g", weight: 450, type: "regular", container_id: container.id})
       assert [%DailyTotal{}, %DailyTotal{}] = Coffee.list_daily_totals()
+    end
+  end
+
+  describe "list_daily_measurements" do
+    alias CoffeeTracker.Coffee.Measurement
+
+    test "returns all the individual measurements for the day" do
+      {:ok, container} = Coffee.create_container(%{unit: "g", weight: 0, name: "bag"})
+      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-27], unit: "g", weight: 450, type: "regular", container_id: container.id})
+      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-27], unit: "g", weight: 450, type: "regular", container_id: container.id})
+      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-28], unit: "g", weight: 450, type: "regular", container_id: container.id})
+      assert [%Measurement{date: ~D[2018-03-27]}, %Measurement{date: ~D[2018-03-27]}] = Coffee.list_daily_measurements(~D[2018-03-27])
     end
   end
 end

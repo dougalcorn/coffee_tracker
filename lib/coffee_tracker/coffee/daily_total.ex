@@ -23,8 +23,12 @@ defmodule CoffeeTracker.Coffee.DailyTotal do
 
   defp subtract_container(%{container_id: container_id} = measurement) when is_nil(container_id), do: measurement
 
-  defp subtract_container(%{container_id: container_id} = measurement) do
+  defp subtract_container(%{container_id: container_id, container: container} = measurement) when is_nil(container) do
     container = Coffee.get_container!(container_id)
+    subtract_weight(measurement, container)
+  end
+
+  defp subtract_container(%{container: container} = measurement) do
     subtract_weight(measurement, container)
   end
 

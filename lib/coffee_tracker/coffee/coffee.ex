@@ -148,10 +148,13 @@ defmodule CoffeeTracker.Coffee do
   Returns the list of measurements for a given Date.
   """
   def list_daily_measurements(date) do
-    CoffeeTracker.Coffee.Measurement
-    |> Ecto.Query.where(date: ^date)
-    |> CoffeeTracker.Repo.all
-    |> CoffeeTracker.Repo.preload(:container)
+    preloader = fn(_ids) -> CoffeeTracker.Coffee.list_containers() end
+    query = from m in CoffeeTracker.Coffee.Measurement,
+      where: m.date == ^date,
+      preload: [container: ^preloader],
+      join: c in assoc(m, :container),
+      order_by: m.inserted_at
+    CoffeeTracker.Repo.all(query)
   end
 
   @doc """
