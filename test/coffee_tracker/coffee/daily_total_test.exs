@@ -31,14 +31,14 @@ defmodule CoffeeTracker.Coffee.DailyTotalTest do
       assert %DailyTotal{unit: "g", weight: ^total} = DailyTotal.get_daily_total!(date)
     end
 
-    test "subtracts out container weight", %{bag: bag} do
+    test "subtracts out container weight" do
       date = ~D[2018-03-28]
       {:ok, hopper} = Coffee.create_container(%{name: "hopper", unit: "g", weight: 200})
       {:ok, _} = Coffee.create_measurement(%{date: date, unit: "g", weight: 450, type: "regular", container_id: hopper.id})
       assert %DailyTotal{weight: 250} = DailyTotal.get_daily_total!(date)
     end
 
-    test "subtracts out the container and converts units", %{bag: bag} do
+    test "subtracts out the container and converts units" do
       date = ~D[2018-03-28]
       {:ok, bag} = Coffee.create_container(%{name: "bag", unit: "g", weight: 0})
       {:ok, _} = Coffee.create_measurement(%{date: date, unit: "lbm", weight: 5, type: "regular", container_id: bag.id})
