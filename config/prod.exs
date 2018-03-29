@@ -26,8 +26,6 @@ config :coffee_tracker, CoffeeTracker.Repo,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
   ssl: true
 
-config :coffee_tracker, CoffeeTracker.Auth.Guardian, secret_key: System.get_env("GUARDIAN_SECRET_KEY")
-
 # Do not print debug messages in production
 config :logger, level: :info
 
