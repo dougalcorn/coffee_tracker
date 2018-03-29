@@ -17,9 +17,10 @@ defmodule CoffeeTrackerWeb.MeasurementController do
   def create(conn, %{"measurement" => measurement_params}) do
     case Coffee.create_measurement(measurement_params) do
       {:ok, measurement} ->
+        date = measurement.date
         conn
         |> put_flash(:info, "Measurement created successfully.")
-        |> redirect(to: daily_summary_path(conn, :index))
+        |> redirect(to: daily_summary_path(CoffeeTrackerWeb.Endpoint, :show, date.year, date.month, date.day))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end

@@ -1,5 +1,7 @@
 <h2>Daily Summary of Coffee</h2>
 
+<span><%= link "New Measurement", to: measurement_path(@conn, :new) %></span>
+
 <table class="table">
   <thead>
     <tr>
@@ -17,5 +19,4 @@
   </tbody>
 </table>
 
-<span><%= link "New Measurement", to: measurement_path(@conn, :new) %></span>
 
