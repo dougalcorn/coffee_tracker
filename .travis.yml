@@ -1,2 +1,8 @@
 language: elixir
-elixir: "1.5.2"
+elixir: 1.5.2
+deploy:
+  provider: heroku
+  app: gaslight-coffee
+  api_key:
+    secure: i9Qls0I8flkgxXjn8ILtsZwj2I4dkiIOGNMBCBXJSLxw7BX8hjzbB7gVUw0QbiPWuIiYFmYsIUAy9CH1ua+IXzWuYPj6IJplA03FiWkgq3FEqj9YB/xea1X7AS9XM8Xo5CdWMaZddjRg+tF24QItJCWjwHLw5hOnYS7YRhQz6NsRXbEOoLvoikbegcRxDA6skWjliKlsPuuLDBpf7BRnKK7VnJg/Rty61ACXZIAePPDrwJ3mmkZ6oJtoDIRrZFl4vI7VHhdMj8EprxIfTqFK6cBOGF1BX1oyYFlS1kip4U/pyk0H308XwvipP8UUDUbIjoLb6jhjRtihdmIKOj/oiSG0SK0EkINzYVAMCgjJbvihk5uv4PIt1moLh0zXa6TzU0QOzgSsgTmyTR8TFbX7foRCipae4hc9Fu8HMX7BqZuTgA2mILW5+OlFa4K+YYNF8HZ0eMI+hQ+NTzLzJ0cHEo+7ue7jm/O70UhgCithnMhMsP0iy4IINCYQ3/nZG3ilOkjcy7yMMtI+p50/SreuBECVyaoKd+biiRvEyXcdj17Yn6Ohz9GSRU3u3um8g5vjubIDlo4Bmdu+sbHeHZLC22G51URlnqOFgvb7D8uwkIrT5gpjaX+LYbecnF3xTEbU7402BUUvewiTCCI/DVNo6Yjev7PgYCWS0+jFvK29ews=
+  run: "mix ecto.migrate"
