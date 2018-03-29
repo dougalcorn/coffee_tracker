@@ -53,10 +53,11 @@ defmodule CoffeeTrackerWeb.MeasurementController do
 
   def delete(conn, %{"id" => id}) do
     measurement = Coffee.get_measurement!(id)
+    date = measurement.date
     {:ok, _measurement} = Coffee.delete_measurement(measurement)
 
     conn
     |> put_flash(:info, "Measurement deleted successfully.")
-    |> redirect(to: daily_summary_path(conn, :index))
+    |> redirect(to: daily_summary_path(CoffeeTrackerWeb.Endpoint, :show, date.year, date.month, date.day))
   end
 end
