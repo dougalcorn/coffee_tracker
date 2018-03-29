@@ -42,9 +42,10 @@ defmodule CoffeeTrackerWeb.MeasurementController do
 
     case Coffee.update_measurement(measurement, measurement_params) do
       {:ok, measurement} ->
+        date = measurement.date
         conn
         |> put_flash(:info, "Measurement updated successfully.")
-        |> redirect(to: daily_summary_path(conn, :index))
+        |> redirect(to: daily_summary_path(CoffeeTrackerWeb.Endpoint, :show, date.year, date.month, date.day))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", measurement: measurement, changeset: changeset)
     end
