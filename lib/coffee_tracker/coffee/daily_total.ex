@@ -1,12 +1,15 @@
 defmodule CoffeeTracker.Coffee.DailyTotal do
-  defstruct [:date, :type, :unit, :weight]
+  defstruct [:date, :type, :unit, :weight, :regular, :decaf]
 
   alias CoffeeTracker.Coffee
   alias CoffeeTracker.Coffee.DailyTotal
 
   def get_daily_total!(date) do
-    %{weight: total} = total_weight(Coffee.list_daily_measurements(date))
-    %DailyTotal{unit: "g", weight: total, date: date}
+    measurements = Coffee.list_daily_measurements(date)
+    %{weight: total} = total_weight(measurements)
+    %{weight: regular} = total_weight(Enum.filter(measurements, fn(x) -> x.type == "Regular" end))
+    %{weight: decaf} = total_weight(Enum.filter(measurements, fn(x) -> x.type == "Decaf" end))
+    %DailyTotal{unit: "g", weight: total, date: date, regular: regular, decaf: decaf}
   end
 
   @grams_per_pound 454
