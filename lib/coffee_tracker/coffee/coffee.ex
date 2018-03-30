@@ -5,18 +5,48 @@ defmodule CoffeeTracker.Coffee do
 
   import Ecto.Query, warn: false
   alias CoffeeTracker.Repo
-
+  alias CoffeeTracker.Coffee
+  alias CoffeeTracker.Coffee.Measurement
   alias CoffeeTracker.Coffee.DailyTotal
 
-  def list_daily_totals() do
-    list_measurement_dates()
-    |> Enum.map(&get_daily_total!/1)
+  alias CoffeeTracker.Coffee.CoffeeContainer
+  defdelegate list_containers, to: CoffeeContainer
+  defdelegate get_container!(id), to: CoffeeContainer
+  defdelegate create_container(attrs), to: CoffeeContainer
+  defdelegate update_container(container, attrs), to: CoffeeContainer
+  defdelegate delete_container(container), to: CoffeeContainer
+  defdelegate change_container(container), to: CoffeeContainer
+
+  alias CoffeeTracker.Coffee.CoffeeMeasurement
+  defdelegate list_measurements, to: CoffeeMeasurement
+  defdelegate get_measurement!(id), to: CoffeeMeasurement
+  defdelegate create_measurement(attrs), to: CoffeeMeasurement
+  defdelegate update_measurement(measurement, attrs), to: CoffeeMeasurement
+  defdelegate delete_measurement(measurement), to: CoffeeMeasurement
+  defdelegate change_measurement(measurement), to: CoffeeMeasurement
+
+
+  @doc """
+  Returns a list of dates for which there are measurements
+  """
+  def list_measurement_dates() do
+    query = from m in Measurement, select: m.date, order_by: [desc: m.date], distinct: true
+    Repo.all(query)
   end
 
-  def list_measurement_dates() do
-    query = from m in CoffeeTracker.Coffee.Measurement, select: m.date, order_by: [desc: m.date], distinct: true
-    CoffeeTracker.Repo.all(query)
+  @doc """
+  Returns the list of measurements for a given Date.
+  """
+  def list_daily_measurements(date) do
+    preloader = fn(_ids) -> Coffee.list_containers() end
+    query = from m in Measurement,
+      where: m.date == ^date,
+      preload: [container: ^preloader],
+      join: c in assoc(m, :container),
+      order_by: [desc: m.type,asc: m.inserted_at]
+    Repo.all(query)
   end
+
   @doc """
   Gets a the total amount of coffee on a given day.
 
@@ -33,208 +63,12 @@ defmodule CoffeeTracker.Coffee do
   """
   def get_daily_total!(date), do: DailyTotal.get_daily_total!(date)
 
-  alias CoffeeTracker.Coffee.Container
-
   @doc """
-  Returns the list of containers.
-
-  ## Examples
-
-      iex> list_containers()
-      [%Container{}, ...]
-
+  Returns the list of daily totals for all of the dates for which there are measurements.
   """
-  def list_containers do
-    Repo.all(Container)
+  def list_daily_totals() do
+    list_measurement_dates()
+    |> Enum.map(&get_daily_total!/1)
   end
 
-  @doc """
-  Gets a single container.
-
-  Raises `Ecto.NoResultsError` if the Container does not exist.
-
-  ## Examples
-
-      iex> get_container!(123)
-      %Container{}
-
-      iex> get_container!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_container!(id), do: Repo.get!(Container, id)
-
-  @doc """
-  Creates a container.
-
-  ## Examples
-
-      iex> create_container(%{field: value})
-      {:ok, %Container{}}
-
-      iex> create_container(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_container(attrs \\ %{}) do
-    %Container{}
-    |> Container.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a container.
-
-  ## Examples
-
-      iex> update_container(container, %{field: new_value})
-      {:ok, %Container{}}
-
-      iex> update_container(container, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_container(%Container{} = container, attrs) do
-    container
-    |> Container.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a Container.
-
-  ## Examples
-
-      iex> delete_container(container)
-      {:ok, %Container{}}
-
-      iex> delete_container(container)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_container(%Container{} = container) do
-    Repo.delete(container)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking container changes.
-
-  ## Examples
-
-      iex> change_container(container)
-      %Ecto.Changeset{source: %Container{}}
-
-  """
-  def change_container(%Container{} = container) do
-    Container.changeset(container, %{})
-  end
-
-  alias CoffeeTracker.Coffee.Measurement
-
-  @doc """
-  Returns the list of measurements.
-
-  ## Examples
-
-      iex> list_measurements()
-      [%Measurement{}, ...]
-
-  """
-  def list_measurements do
-    Repo.all(Measurement)
-  end
-
-  @doc """
-  Returns the list of measurements for a given Date.
-  """
-  def list_daily_measurements(date) do
-    preloader = fn(_ids) -> CoffeeTracker.Coffee.list_containers() end
-    query = from m in CoffeeTracker.Coffee.Measurement,
-      where: m.date == ^date,
-      preload: [container: ^preloader],
-      join: c in assoc(m, :container),
-      order_by: [desc: m.type,asc: m.inserted_at]
-    CoffeeTracker.Repo.all(query)
-  end
-
-  @doc """
-  Gets a single measurement.
-
-  Raises `Ecto.NoResultsError` if the Measurement does not exist.
-
-  ## Examples
-
-      iex> get_measurement!(123)
-      %Measurement{}
-
-      iex> get_measurement!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_measurement!(id), do: Repo.get!(Measurement, id)
-
-  @doc """
-  Creates a measurement.
-
-  ## Examples
-
-      iex> create_measurement(%{field: value})
-      {:ok, %Measurement{}}
-
-      iex> create_measurement(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_measurement(attrs \\ %{}) do
-    %Measurement{}
-    |> Measurement.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a measurement.
-
-  ## Examples
-
-      iex> update_measurement(measurement, %{field: new_value})
-      {:ok, %Measurement{}}
-
-      iex> update_measurement(measurement, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_measurement(%Measurement{} = measurement, attrs) do
-    measurement
-    |> Measurement.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a Measurement.
-
-  ## Examples
-
-      iex> delete_measurement(measurement)
-      {:ok, %Measurement{}}
-
-      iex> delete_measurement(measurement)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_measurement(%Measurement{} = measurement) do
-    Repo.delete(measurement)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking measurement changes.
-
-  ## Examples
-
-      iex> change_measurement(measurement)
-      %Ecto.Changeset{source: %Measurement{}}
-
-  """
-  def change_measurement(%Measurement{} = measurement) do
-    Measurement.changeset(measurement, %{})
-  end
 end
