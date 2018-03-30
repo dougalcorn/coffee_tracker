@@ -12,14 +12,26 @@
     </tr>
   </thead>
   <tbody>
-<%= for daily_total <- @daily_totals do %>
-    <tr>
-      <td><%= display_measurement(daily_total, nil) %> </td>
-      <td><%= display_measurement(%{unit: daily_total.unit, weight: daily_total.regular}, nil) %> </td>
-      <td><%= display_measurement(%{unit: daily_total.unit, weight: daily_total.decaf}, nil) %> </td>
-      <td><%= link daily_total.date, to: daily_summary_path(CoffeeTrackerWeb.Endpoint, :show, daily_total.date.year, daily_total.date.month, daily_total.date.day) %></td>
-    </tr>
-<% end %>
+    <%= length(@daily_totals) %> <%= length(@daily_diffs) %>
+    <%= for {daily_total, daily_diff} <- List.zip([@daily_totals, @daily_diffs]) do %>
+      <tr>
+        <td>
+          <%= display_measurement(daily_total) %>
+          (&Delta; <%= display_measurement(daily_diff) %>)
+        </td>
+        <td>
+          <%= display_measurement(%{unit: daily_total.unit, weight: daily_total.regular}) %>
+          (&Delta; <%=  display_measurement(%{unit: daily_diff.unit, weight: daily_diff.regular}) %>)
+        </td>
+        <td>
+          <%= display_measurement(%{unit: daily_total.unit, weight: daily_total.decaf}) %>
+          (&Delta; <%=  display_measurement(%{unit: daily_diff.unit, weight: daily_diff.decaf}) %>)
+        </td>
+        <td>
+          <%= link daily_total.date, to: daily_summary_path(CoffeeTrackerWeb.Endpoint, :show, daily_total.date.year, daily_total.date.month, daily_total.date.day) %>
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
 

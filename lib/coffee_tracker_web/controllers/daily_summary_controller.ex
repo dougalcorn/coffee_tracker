@@ -5,7 +5,8 @@ defmodule CoffeeTrackerWeb.DailySummaryController do
 
   def index(conn, _params) do
     daily_totals = Coffee.list_daily_totals()
-    render(conn, "index.html", daily_totals: daily_totals)
+    daily_diffs = Coffee.list_daily_diffs(daily_totals)
+    render(conn, "index.html", daily_totals: daily_totals, daily_diffs: daily_diffs)
   end
 
   def show(conn, %{"year" => year, "month" => month, "day" => day}) do

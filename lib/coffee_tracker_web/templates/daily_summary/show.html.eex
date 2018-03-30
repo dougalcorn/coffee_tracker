@@ -23,9 +23,9 @@
   </tbody>
   <tfoot>
     <tr>
-      <td><strong><%= display_measurement(%{unit: @daily_total.unit, weight: @daily_total.regular}, nil) %></strong> </td>
-      <td><strong><%= display_measurement(%{unit: @daily_total.unit, weight: @daily_total.decaf}, nil) %></strong> </td>
-      <td class="text-right"><strong>Total: <%= display_measurement(@daily_total, nil) %></strong> </td>
+      <td><strong><%= display_measurement(%{unit: @daily_total.unit, weight: @daily_total.regular}) %></strong> </td>
+      <td><strong><%= display_measurement(%{unit: @daily_total.unit, weight: @daily_total.decaf}) %></strong> </td>
+      <td class="text-right"><strong>Total: <%= display_measurement(@daily_total) %></strong> </td>
     </tr>
   </tfoot>
 </table>
