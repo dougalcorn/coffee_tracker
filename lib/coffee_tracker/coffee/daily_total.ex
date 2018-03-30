@@ -12,10 +12,13 @@ defmodule CoffeeTracker.Coffee.DailyTotal do
     %DailyTotal{unit: "g", weight: total, date: date, regular: regular, decaf: decaf}
   end
 
+  def get_daily_diff!(daily_total, nil) do
+    %DailyTotal{unit: daily_total.unit, date: daily_total.date, weight: 0, regular: 0, decaf: 0}
+  end
   def get_daily_diff!(daily_total, prev_total) do
-    %{weight: diff} = subtract_weight(daily_total, prev_total)
-    %{weight: r_diff} = subtract_weight(regular_weight(daily_total), regular_weight(prev_total))
-    %{weight: d_diff} = subtract_weight(decaf_weight(daily_total), decaf_weight(prev_total))
+    %{weight: diff} = subtract_weight(prev_total, daily_total)
+    %{weight: r_diff} = subtract_weight(regular_weight(prev_total), regular_weight(daily_total))
+    %{weight: d_diff} = subtract_weight(decaf_weight(prev_total), decaf_weight(daily_total))
     %DailyTotal{unit: daily_total.unit, date: daily_total.date, weight: diff, regular: r_diff, decaf: d_diff}
   end
 
@@ -49,6 +52,8 @@ defmodule CoffeeTracker.Coffee.DailyTotal do
 
   defp subtract_weight(nil, nil), do: %{weight: nil}
   defp subtract_weight(%{weight: nil}, %{weight: nil}), do: %{weight: nil}
+  defp subtract_weight(%{weight: a}, nil), do: %{weight: a}
+  defp subtract_weight(%{weight: a}, %{weight: nil}), do: %{weight: a}
   defp subtract_weight(%{unit: "g", weight: a}, %{unit: "g", weight: b}) do
     %{unit: "g", weight: a - b}
   end

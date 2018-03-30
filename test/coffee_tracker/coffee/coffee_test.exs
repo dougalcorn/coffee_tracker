@@ -182,11 +182,11 @@ defmodule CoffeeTracker.CoffeeTest do
     end
 
     test "returns all the individual measurements for the day" do
-      one = %DailyTotal{date: ~D[2018-03-27], weight: 450, unit: "g"}
-      two = %DailyTotal{date: ~D[2018-03-28], weight: 430, unit: "g"}
       three = %DailyTotal{date: ~D[2018-03-29], weight: 400, unit: "g"}
-      daily_totals = [one, two, three]
-      assert [%DailyTotal{weight: 0}, %DailyTotal{weight: -20}, %DailyTotal{weight: -30}] = Coffee.list_daily_diffs(daily_totals)
+      two = %DailyTotal{date: ~D[2018-03-28], weight: 430, unit: "g"}
+      one = %DailyTotal{date: ~D[2018-03-27], weight: 450, unit: "g"}
+      daily_totals = [three, two, one]
+      assert [%DailyTotal{weight: 30}, %DailyTotal{weight: 20}, %DailyTotal{weight: 0}] = Coffee.list_daily_diffs(daily_totals)
     end
   end
 end
