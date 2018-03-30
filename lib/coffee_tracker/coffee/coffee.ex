@@ -153,7 +153,7 @@ defmodule CoffeeTracker.Coffee do
       where: m.date == ^date,
       preload: [container: ^preloader],
       join: c in assoc(m, :container),
-      order_by: m.inserted_at
+      order_by: [desc: m.type,asc: m.inserted_at]
     CoffeeTracker.Repo.all(query)
   end
 
