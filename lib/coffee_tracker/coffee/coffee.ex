@@ -71,4 +71,12 @@ defmodule CoffeeTracker.Coffee do
     |> Enum.map(&get_daily_total!/1)
   end
 
+  def list_daily_diffs(daily_totals) do
+    for d <- daily_totals do
+      case Enum.find_index(daily_totals, fn(x) -> d == x end) do
+        0 -> %DailyTotal{date: d.date, unit: d.unit, weight: 0}
+        index -> DailyTotal.get_daily_diff!(d, Enum.at(daily_totals, index - 1))
+      end
+    end
+  end
 end
