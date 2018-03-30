@@ -48,6 +48,7 @@ defmodule CoffeeTracker.Coffee.DailyTotal do
   end
 
   defp subtract_weight(nil, nil), do: %{weight: nil}
+  defp subtract_weight(%{weight: nil}, %{weight: nil}), do: %{weight: nil}
   defp subtract_weight(%{unit: "g", weight: a}, %{unit: "g", weight: b}) do
     %{unit: "g", weight: a - b}
   end
