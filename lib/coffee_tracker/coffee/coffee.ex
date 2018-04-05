@@ -81,7 +81,7 @@ defmodule CoffeeTracker.Coffee do
   end
 
   defp prev_daily_total(daily_totals, daily_total) do
-    Enum.find(daily_totals, fn(d) -> d.date < daily_total.date end)
+    Enum.find(daily_totals, fn(d) -> Date.compare(d.date, daily_total.date) == :lt end)
   end
 
 end
