@@ -63,6 +63,8 @@ defmodule CoffeeTracker.Coffee do
   """
   def get_daily_total!(date), do: DailyTotal.get_daily_total!(date)
 
+  defdelegate get_daily_diff!(today_total, prev_total), to: DailyTotal
+
   @doc """
   Returns the list of daily totals for all of the dates for which there are measurements.
   """

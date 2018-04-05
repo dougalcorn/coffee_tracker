@@ -167,26 +167,22 @@ defmodule CoffeeTracker.CoffeeTest do
   describe "list_daily_diffs" do
     alias CoffeeTracker.Coffee.DailyTotal
 
-    test "comprehensions" do
-      one = %DailyTotal{date: ~D[2018-03-27], weight: 450, unit: "g"}
-      two = %DailyTotal{date: ~D[2018-03-28], weight: 450, unit: "g"}
-      three = %DailyTotal{date: ~D[2018-03-29], weight: 450, unit: "g"}
-      daily_totals = [one, two, three]
-      previous_days = for d <- daily_totals do
-        case Enum.find_index(daily_totals, fn(x) -> d == x end) do
-          0 -> nil
-          index -> Enum.at(daily_totals, index - 1)
-        end
-      end
-      assert [nil, one, two] == previous_days
-    end
-
     test "returns all the individual measurements for the day" do
       three = %DailyTotal{date: ~D[2018-03-29], weight: 400, unit: "g"}
       two = %DailyTotal{date: ~D[2018-03-28], weight: 430, unit: "g"}
       one = %DailyTotal{date: ~D[2018-03-27], weight: 450, unit: "g"}
       daily_totals = [three, two, one]
       assert [%DailyTotal{weight: 30}, %DailyTotal{weight: 20}, %DailyTotal{weight: 0}] = Coffee.list_daily_diffs(daily_totals)
+    end
+  end
+
+  describe "get_daily_diff!" do
+    alias CoffeeTracker.Coffee.DailyTotal
+
+    test "with only a total" do
+      today = %DailyTotal{date: ~D[2018-03-28], weight: 3230, regular: 1230, decaf: 2000, unit: "g"}
+      prev = %DailyTotal{date: ~D[2018-03-27], weight: 3430, regular: 1330, decaf: 2100, unit: "g"}
+      assert %DailyTotal{date: ~D[2018-03-28], weight: 200, regular: 100, decaf: 100, unit: "g"} = Coffee.get_daily_diff!(today, prev)
     end
   end
 end
