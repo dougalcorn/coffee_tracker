@@ -8,6 +8,7 @@ defmodule CoffeeTracker.Coffee.Measurement do
     field :type, :string
     field :unit, :string
     field :weight, :integer
+    field :delivery, :boolean
     belongs_to :container, CoffeeTracker.Coffee.Container
 
     timestamps()
@@ -16,7 +17,7 @@ defmodule CoffeeTracker.Coffee.Measurement do
   @doc false
   def changeset(measurement, attrs) do
     measurement
-    |> cast(attrs, [:unit, :weight, :date, :type, :container_id])
+    |> cast(attrs, [:unit, :weight, :date, :type, :container_id, :delivery])
     |> validate_required([:unit, :weight, :date, :type])
   end
 end

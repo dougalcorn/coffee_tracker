@@ -1,1 +1,6 @@
 /* This file is for your main application css. */
+
+img.small-icon {
+    width: 20px; /* you can use % */
+    height: auto;
+}

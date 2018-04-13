@@ -70,7 +70,7 @@ defmodule CoffeeTracker.CoffeeTest do
   describe "measurements" do
     alias CoffeeTracker.Coffee.Measurement
 
-    @valid_attrs %{date: ~D[2010-04-17], type: "some type", unit: "some unit", weight: 42}
+    @valid_attrs %{date: ~D[2010-04-17], type: "some type", unit: "some unit", weight: 42, delivery: false}
     @update_attrs %{date: ~D[2011-05-18], type: "some updated type", unit: "some updated unit", weight: 43}
     @invalid_attrs %{date: nil, type: nil, unit: nil, weight: nil}
 

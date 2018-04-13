@@ -18,4 +18,9 @@ defmodule CoffeeTrackerWeb.GlobalHelpers do
   def display_measurement(measurement, %{name: name}) do
     "#{display_measurement(measurement)} #{name}"
   end
+
+  def display_shipment_icon(%{delivery: false}), do: ""
+  def display_shipment_icon(%{delivery: true}) do
+    Phoenix.HTML.Tag.img_tag(CoffeeTrackerWeb.Endpoint.static_path("/images/delivery.png"), class: "small-icon")
+  end
 end
