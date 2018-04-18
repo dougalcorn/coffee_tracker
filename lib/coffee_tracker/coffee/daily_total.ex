@@ -1,25 +1,38 @@
 defmodule CoffeeTracker.Coffee.DailyTotal do
-  defstruct [:date, :type, :unit, :weight, :regular, :decaf]
+  defstruct [:date, :unit, :weight, :regular, :decaf]
 
   alias CoffeeTracker.Coffee
   alias CoffeeTracker.Coffee.DailyTotal
 
   def get_daily_total!(date) do
-    measurements = Coffee.list_daily_measurements(date)
+    get_daily_total!(date, Coffee.list_daily_measurements(date))
+  end
+
+  def get_daily_total!(date, measurements) do
     %{weight: total} = total_weight(measurements)
     %{weight: regular} = total_weight(Enum.filter(measurements, fn(x) -> x.type == "Regular" end))
     %{weight: decaf} = total_weight(Enum.filter(measurements, fn(x) -> x.type == "Decaf" end))
     %DailyTotal{unit: "g", weight: total, date: date, regular: regular, decaf: decaf}
   end
 
+  def get_daily_delivery_total!(date) do
+    get_daily_total!(date, Coffee.list_daily_delivery_measurements(date))
+  end
+
   def get_daily_diff!(daily_total, nil) do
     %DailyTotal{unit: daily_total.unit, date: daily_total.date, weight: 0, regular: 0, decaf: 0}
   end
   def get_daily_diff!(daily_total, prev_total) do
-    %{weight: diff} = subtract_weight(prev_total, daily_total)
-    %{weight: r_diff} = subtract_weight(regular_weight(prev_total), regular_weight(daily_total))
-    %{weight: d_diff} = subtract_weight(decaf_weight(prev_total), decaf_weight(daily_total))
+    %{weight: diff} = subtract_weight(daily_total, prev_total)
+    %{weight: r_diff} = subtract_weight(regular_weight(daily_total), regular_weight(prev_total))
+    %{weight: d_diff} = subtract_weight(decaf_weight(daily_total), decaf_weight(prev_total))
     %DailyTotal{unit: daily_total.unit, date: daily_total.date, weight: diff, regular: r_diff, decaf: d_diff}
+  end
+
+  def get_daily_diff!(daily_total, prev_total, nil), do: get_daily_diff!(daily_total, prev_total)
+  def get_daily_diff!(daily_total, prev_total, delivery_total) do
+    today_minus_delivery = get_daily_diff!(daily_total, delivery_total)
+    get_daily_diff!(today_minus_delivery, prev_total)
   end
 
   defp regular_weight(%{unit: unit, regular: regular}) do

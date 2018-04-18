@@ -167,12 +167,21 @@ defmodule CoffeeTracker.CoffeeTest do
   describe "list_daily_diffs" do
     alias CoffeeTracker.Coffee.DailyTotal
 
-    test "returns all the individual measurements for the day" do
-      three = %DailyTotal{date: ~D[2018-03-29], weight: 400, unit: "g"}
-      two = %DailyTotal{date: ~D[2018-03-28], weight: 430, unit: "g"}
+    test "returns a list of daily total structs with the weight differences" do
+      three = %DailyTotal{date: ~D[2018-03-29], weight: (400 + 908), unit: "g"}
+      two = %DailyTotal{date: ~D[2018-03-28], weight: (430 + 908), unit: "g"}
       one = %DailyTotal{date: ~D[2018-03-27], weight: 450, unit: "g"}
       daily_totals = [three, two, one]
-      assert [%DailyTotal{weight: 30}, %DailyTotal{weight: 20}, %DailyTotal{weight: 0}] = Coffee.list_daily_diffs(daily_totals)
+      delivery_totals = [
+        %DailyTotal{date: ~D[2018-03-29], weight: 0, unit: "g"}, # no delivery this day
+        %DailyTotal{date: ~D[2018-03-28], weight: 908, unit: "g"}, # 2 pound delivery
+        %DailyTotal{date: ~D[2018-03-27], weight: 0, unit: "g"}, # no delivery this day
+      ]
+      assert [
+        %DailyTotal{weight: -30}, # 400 - 430
+        %DailyTotal{weight: -20}, # 430 - 1358
+        %DailyTotal{weight: 0}  # this is the first day, so there's no diff for previous day 
+      ] = Coffee.list_daily_diffs(daily_totals, delivery_totals)
     end
   end
 
@@ -182,7 +191,19 @@ defmodule CoffeeTracker.CoffeeTest do
     test "with only a total" do
       today = %DailyTotal{date: ~D[2018-03-28], weight: 3230, regular: 1230, decaf: 2000, unit: "g"}
       prev = %DailyTotal{date: ~D[2018-03-27], weight: 3430, regular: 1330, decaf: 2100, unit: "g"}
-      assert %DailyTotal{date: ~D[2018-03-28], weight: 200, regular: 100, decaf: 100, unit: "g"} = Coffee.get_daily_diff!(today, prev)
+      assert %DailyTotal{date: ~D[2018-03-28], weight: -200, regular: -100, decaf: -100, unit: "g"} = Coffee.get_daily_diff!(today, prev)
+    end
+
+    test "with a delivery" do
+      delivery = %DailyTotal{unit: "g", weight: 908, regular: 454, decaf: 454} # 2 pounds delivered, 1 pound each of reg and decaf
+      yesterday = %DailyTotal{date: ~D[2018-03-27], weight: (454+454), regular: 454, decaf: 454, unit: "g"} #  2 pounds, 1 of each
+      usage = %DailyTotal{weight: -200, regular: -100, decaf: -100, date: ~D[2018-03-28], unit: "g"}
+      weight = yesterday.weight + delivery.weight + usage.weight
+      regular = yesterday.regular + delivery.regular + usage.regular
+      decaf = yesterday.decaf + delivery.decaf + usage.decaf
+      today = %DailyTotal{date: ~D[2018-03-28], weight: weight, regular: regular, decaf: decaf, unit: "g"}
+
+      assert usage == Coffee.get_daily_diff!(today, yesterday, delivery)
     end
   end
 end

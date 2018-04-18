@@ -46,6 +46,10 @@ defmodule CoffeeTracker.Coffee do
       order_by: [desc: m.type,asc: m.inserted_at]
     Repo.all(query)
   end
+  def list_daily_delivery_measurements(date) do
+    list_daily_measurements(date)
+    |> Enum.filter(fn(m) -> m.delivery == true end)
+  end
 
   @doc """
   Gets a the total amount of coffee on a given day.
@@ -62,8 +66,10 @@ defmodule CoffeeTracker.Coffee do
 
   """
   def get_daily_total!(date), do: DailyTotal.get_daily_total!(date)
+  def get_daily_delivery_total!(date), do: DailyTotal.get_daily_delivery_total!(date)
 
   defdelegate get_daily_diff!(today_total, prev_total), to: DailyTotal
+  defdelegate get_daily_diff!(today_total, prev_total, delivery_total), to: DailyTotal
 
   @doc """
   Returns the list of daily totals for all of the dates for which there are measurements.
@@ -73,10 +79,20 @@ defmodule CoffeeTracker.Coffee do
     |> Enum.map(&get_daily_total!/1)
   end
 
+  def list_daily_delivery_totals() do
+    list_measurement_dates()
+    |> Enum.map(&get_daily_delivery_total!/1)
+  end
+
   def list_daily_diffs(daily_totals) do
+    list_daily_diffs(daily_totals, Coffee.list_daily_delivery_totals())
+  end
+
+  def list_daily_diffs(daily_totals, delivery_totals) do
     for daily_total <- daily_totals do
       previous = prev_daily_total(daily_totals, daily_total)
-      DailyTotal.get_daily_diff!(daily_total, previous)
+      delivery_total = delivery_total(delivery_totals, daily_total)
+      DailyTotal.get_daily_diff!(daily_total, previous, delivery_total)
     end
   end
 
@@ -84,4 +100,8 @@ defmodule CoffeeTracker.Coffee do
     Enum.find(daily_totals, fn(d) -> Date.compare(d.date, daily_total.date) == :lt end)
   end
 
+  defp delivery_total(_delivery_totals, nil), do: nil
+  defp delivery_total(delivery_totals, %{date: date}) do
+    Enum.find(delivery_totals, fn(d) -> Date.compare(d.date, date) == :eq end)
+  end
 end
