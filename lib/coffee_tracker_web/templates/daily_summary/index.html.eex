@@ -12,7 +12,6 @@
     </tr>
   </thead>
   <tbody>
-    <%= length(@daily_totals) %> <%= length(@daily_diffs) %>
     <%= for {daily_total, daily_diff} <- List.zip([@daily_totals, @daily_diffs]) do %>
       <tr>
         <td>

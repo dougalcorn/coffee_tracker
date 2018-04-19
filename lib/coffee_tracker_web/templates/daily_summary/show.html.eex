@@ -1,5 +1,7 @@
 <h2>Daily Summary for <%= @daily_total.date %></h2>
 
+<span><%= link "New Measurement", to: measurement_path(@conn, :new) %></span>
+
 <table class="table">
   <thead>
     <tr>
@@ -39,5 +41,3 @@
     </tr>
   </tfoot>
 </table>
-
-<span><%= link "New Measurement", to: measurement_path(@conn, :new) %></span>
