@@ -1,6 +1,6 @@
 defmodule CoffeeTrackerWeb.GlobalHelpers do
 
-  def display_measurement(%{weight: weight, unit: "g"}) when abs(weight) > 454 do
+  def display_measurement(%{weight: weight, unit: "g"}) when abs(weight) > 100 do
     display_measurement(%{weight: weight / 454.0, unit: "lbm"})
   end
 
