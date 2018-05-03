@@ -19,12 +19,12 @@
           (&Delta; <%= display_measurement(daily_diff) %>)
         </td>
         <td>
-          <%= display_measurement(%{unit: daily_total.unit, weight: daily_total.regular}) %>
-          (&Delta; <%=  display_measurement(%{unit: daily_diff.unit, weight: daily_diff.regular}) %>)
+          <%= display_measurement(daily_total, :regular) %>
+          (&Delta; <%=  display_measurement(daily_diff, :regular) %>)
         </td>
         <td>
-          <%= display_measurement(%{unit: daily_total.unit, weight: daily_total.decaf}) %>
-          (&Delta; <%=  display_measurement(%{unit: daily_diff.unit, weight: daily_diff.decaf}) %>)
+          <%= display_measurement(daily_total, :decaf) %>
+          (&Delta; <%=  display_measurement(daily_diff, :decaf) %>)
         </td>
         <td>
           <%= link daily_total.date, to: daily_summary_path(CoffeeTrackerWeb.Endpoint, :show, daily_total.date.year, daily_total.date.month, daily_total.date.day) %>

@@ -1,5 +1,12 @@
 defmodule CoffeeTrackerWeb.GlobalHelpers do
 
+  alias CoffeeTracker.Coffee.DailyTotal
+
+  def display_measurement(%DailyTotal{} = measurement, property) do
+    weight = Map.get(Map.from_struct(measurement), property)
+    display_measurement(%{unit: measurement.unit, weight: weight})
+  end
+
   def display_measurement(%{weight: weight, unit: "g"}) when abs(weight) > 100 do
     display_measurement(%{weight: weight / 454.0, unit: "lbm"})
   end
