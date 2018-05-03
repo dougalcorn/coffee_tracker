@@ -145,9 +145,10 @@ defmodule CoffeeTracker.CoffeeTest do
 
     test "returns a single total for every day there's a measurement" do
       {:ok, container} = Coffee.create_container(%{unit: "g", weight: 0, name: "bag"})
-      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-27], unit: "g", weight: 450, type: "regular", container_id: container.id})
-      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-27], unit: "g", weight: 450, type: "regular", container_id: container.id})
-      {:ok, _} = Coffee.create_measurement(%{date: ~D[2018-03-28], unit: "g", weight: 450, type: "regular", container_id: container.id})
+      today = Date.utc_today()
+      {:ok, _} = Coffee.create_measurement(%{date: today, unit: "g", weight: 450, type: "regular", container_id: container.id})
+      {:ok, _} = Coffee.create_measurement(%{date: today, unit: "g", weight: 450, type: "regular", container_id: container.id})
+      {:ok, _} = Coffee.create_measurement(%{date: Date.add(today, 1), unit: "g", weight: 450, type: "regular", container_id: container.id})
       assert [%DailyTotal{}, %DailyTotal{}] = Coffee.list_daily_totals()
     end
   end

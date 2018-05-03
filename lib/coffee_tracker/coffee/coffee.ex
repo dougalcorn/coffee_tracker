@@ -30,7 +30,11 @@ defmodule CoffeeTracker.Coffee do
   Returns a list of dates for which there are measurements
   """
   def list_measurement_dates() do
-    query = from m in Measurement, select: m.date, order_by: [desc: m.date], distinct: true
+    query = from m in Measurement,
+      select: m.date,
+      limit: 21,
+      order_by: [desc: m.date],
+      distinct: true
     Repo.all(query)
   end
 
