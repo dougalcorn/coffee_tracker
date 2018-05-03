@@ -6,7 +6,10 @@ defmodule CoffeeTrackerWeb.DailySummaryController do
   def index(conn, _params) do
     daily_totals = Coffee.list_daily_totals()
     daily_diffs = Coffee.list_daily_diffs(daily_totals)
-    render(conn, "index.html", daily_totals: daily_totals, daily_diffs: daily_diffs)
+    first = hd(daily_diffs).date
+    last = Date.add(first, -14)
+    two_week_total_usage = Coffee.total_usage(daily_diffs, Date.range(first, last))
+    render(conn, "index.html", daily_totals: daily_totals, daily_diffs: daily_diffs, two_week_total_usage: two_week_total_usage)
   end
 
   def show(conn, %{"year" => year, "month" => month, "day" => day}) do

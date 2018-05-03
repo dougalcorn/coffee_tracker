@@ -10,6 +10,12 @@
       <th>Decaf</th>
       <th>Date</th>
     </tr>
+    <tr>
+      <th><%= display_measurement(@two_week_total_usage) %></th>
+      <th><%= display_measurement(@two_week_total_usage, :regular) %></th>
+      <th><%= display_measurement(@two_week_total_usage, :decaf) %></th>
+      <th>Two week total usage</th>
+    </tr>
   </thead>
   <tbody>
     <%= for {daily_total, daily_diff} <- List.zip([@daily_totals, @daily_diffs]) do %>
