@@ -206,4 +206,28 @@ defmodule CoffeeTracker.CoffeeTest do
       assert usage == Coffee.get_daily_diff!(today, yesterday, delivery)
     end
   end
+
+  describe "total_usage" do
+    alias Coffee.DailyTotal
+    test "with a list of daily diffs" do
+      daily_diffs = [
+        %DailyTotal{date: ~D[2018-03-27], weight: -450, regular: -400, decaf: -50, unit: "g"},
+        %DailyTotal{date: ~D[2018-03-26], weight: -450, regular: -400, decaf: -50, unit: "g"},
+        %DailyTotal{date: ~D[2018-03-25], weight: -450, regular: -400, decaf: -50, unit: "g"},
+        %DailyTotal{date: ~D[2018-03-24], weight: -450, regular: -400, decaf: -50, unit: "g"},
+        %DailyTotal{date: ~D[2018-03-23], weight: -450, regular: -400, decaf: -50, unit: "g"},
+        %DailyTotal{date: ~D[2018-03-22], weight: -450, regular: -400, decaf: -50, unit: "g"}
+      ]
+      total_weight = 5 * -450
+      total_regular = 5 * -400
+      total_decaf = 5 * -50
+      date_range = Date.range(hd(daily_diffs).date, ~D[2018-03-23])
+      expected_usage = %DailyTotal{unit: "g", weight: total_weight, regular: total_regular, decaf: total_decaf }
+      total_usage = Coffee.total_usage(daily_diffs, date_range)
+      assert total_usage.weight == expected_usage.weight
+      assert total_usage.regular == expected_usage.regular
+      assert total_usage.decaf == expected_usage.decaf
+    end
+  end
 end
+

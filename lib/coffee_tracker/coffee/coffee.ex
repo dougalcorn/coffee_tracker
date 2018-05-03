@@ -68,6 +68,7 @@ defmodule CoffeeTracker.Coffee do
   def get_daily_total!(date), do: DailyTotal.get_daily_total!(date)
   def get_daily_delivery_total!(date), do: DailyTotal.get_daily_delivery_total!(date)
 
+  defdelegate get_daily_sum!(a, b), to: DailyTotal
   defdelegate get_daily_diff!(today_total, prev_total), to: DailyTotal
   defdelegate get_daily_diff!(today_total, prev_total, delivery_total), to: DailyTotal
 
@@ -104,4 +105,6 @@ defmodule CoffeeTracker.Coffee do
   defp delivery_total(delivery_totals, %{date: date}) do
     Enum.find(delivery_totals, fn(d) -> Date.compare(d.date, date) == :eq end)
   end
+
+  defdelegate total_usage(list, date_range), to: CoffeeTracker.Coffee.TotalUsage
 end

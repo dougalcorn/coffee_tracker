@@ -29,6 +29,14 @@ defmodule CoffeeTracker.Coffee.DailyTotal do
     %DailyTotal{unit: daily_total.unit, date: daily_total.date, weight: diff, regular: r_diff, decaf: d_diff}
   end
 
+  def get_daily_sum!(a, b) do
+    %{weight: sum} = add_weight(a, b)
+    %{weight: r_sum} = add_weight(regular_weight(a), regular_weight(b))
+    %{weight: d_sum} = add_weight(decaf_weight(a), decaf_weight(b))
+    %DailyTotal{unit: a.unit, date: a.date, weight: sum, regular: r_sum, decaf: d_sum}
+  end
+
+
   def get_daily_diff!(daily_total, prev_total, nil), do: get_daily_diff!(daily_total, prev_total)
   def get_daily_diff!(daily_total, prev_total, delivery_total) do
     today_minus_delivery = get_daily_diff!(daily_total, delivery_total)
