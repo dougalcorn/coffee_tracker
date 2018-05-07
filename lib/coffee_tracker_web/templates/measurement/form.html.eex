@@ -16,8 +16,11 @@
 </div>
 
 <div class="form-group">
-  <%= label f, :container, class: "control-label" %>
-  <%= select f, :container_id, containers() %>
+  <%= for {name, id} <- containers() do %>
+    <%= label f, "container_id_#{id}", class: "control-label" do %>
+      <%= radio_button f, :container_id, id %> <%= name %>
+    <% end %>
+  <% end %>
   <%= error_tag f, :container_id %>
 </div>
 
