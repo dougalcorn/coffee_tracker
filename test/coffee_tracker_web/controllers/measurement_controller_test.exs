@@ -35,6 +35,7 @@ defmodule CoffeeTrackerWeb.MeasurementControllerTest do
 
   describe "new measurement" do
     test "renders form", %{conn: conn} do
+      {:ok, _} = Coffee.create_container(%{name: "cannister", weight: 1, unit: "g"})
       conn = get conn, measurement_path(conn, :new)
       assert html_response(conn, 200) =~ "New Measurement"
     end

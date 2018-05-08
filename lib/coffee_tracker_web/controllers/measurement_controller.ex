@@ -10,7 +10,8 @@ defmodule CoffeeTrackerWeb.MeasurementController do
   end
 
   def new(conn, _params) do
-    changeset = Coffee.change_measurement(%Measurement{date: Date.utc_today, unit: "g", type: "Regular"})
+    cannister = Coffee.list_containers() |> Enum.find(fn(c) -> c.name == "cannister" end)
+    changeset = Coffee.change_measurement(%Measurement{date: Date.utc_today, unit: "g", type: "Regular", container_id: cannister.id})
     render(conn, "new.html", changeset: changeset)
   end
 
